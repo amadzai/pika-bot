@@ -1,0 +1,34 @@
+[Unit]
+Description=pika-bot Polymarket copy trader
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pika
+Group=pika
+WorkingDirectory=/home/pika/pika-bot
+EnvironmentFile=/etc/pika-bot/secrets.env
+ExecStart=/home/pika/.bun/bin/bun run src/index.ts
+Restart=on-failure
+RestartSec=10s
+StandardOutput=journal
+StandardError=journal
+
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/pika/pika-bot/data
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictNamespaces=true
+LockPersonality=true
+MemoryDenyWriteExecute=false
+RestrictRealtime=true
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=multi-user.target
